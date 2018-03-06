@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,15 +25,16 @@ public class Multimedia implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMultimedia;
     
     @Lob
+    @Column(nullable=false)
     private byte[] data;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkCard")
-    private Long fkCard;
+    @JoinColumn(name="fkCard",nullable=false)
+    private Card fkCard;
 
     public byte[] getData() {
         return data;
@@ -42,11 +44,11 @@ public class Multimedia implements Serializable {
         this.data = data;
     }
 
-    public Long getFkCard() {
+    public Card getFkCard() {
         return fkCard;
     }
 
-    public void setFkCard(Long fkCard) {
+    public void setFkCard(Card fkCard) {
         this.fkCard = fkCard;
     }
     

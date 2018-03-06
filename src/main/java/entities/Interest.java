@@ -23,30 +23,30 @@ public class Interest implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idInterest;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkUser")
-    private Long fkUser;
+    @JoinColumn(name="fkUser",nullable=false)
+    private Users fkUser;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkCategory")
-    private Long fkCategory;
+    @JoinColumn(name="fkCategory",nullable=false)
+    private Category fkCategory;
 
-    public Long getFkUser() {
+    public Users getFkUser() {
         return fkUser;
     }
 
-    public void setFkUser(Long fkUser) {
+    public void setFkUser(Users fkUser) {
         this.fkUser = fkUser;
     }
 
-    public Long getFkCategory() {
+    public Category getFkCategory() {
         return fkCategory;
     }
 
-    public void setFkCategory(Long fkCategory) {
+    public void setFkCategory(Category fkCategory) {
         this.fkCategory = fkCategory;
     }
 

@@ -23,30 +23,30 @@ public class Follower implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idFollower;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="follower")
-    private Long follower;
+    @JoinColumn(name="follower", nullable=false)
+    private Users follower;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="followed")
-    private Long followed;
+    @JoinColumn(name="followed", nullable=false)
+    private Users followed;
 
-    public Long getFollower() {
+    public Users getFollower() {
         return follower;
     }
 
-    public void setFollower(Long follower) {
+    public void setFollower(Users follower) {
         this.follower = follower;
     }
 
-    public Long getFollowed() {
+    public Users getFollowed() {
         return followed;
     }
 
-    public void setFollowed(Long followed) {
+    public void setFollowed(Users followed) {
         this.followed = followed;
     }
 

@@ -6,10 +6,13 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,11 +23,28 @@ public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(nullable=false)
     private String username;
-    private String email;
 
+    @Column(nullable=false)
+    private String email;
+    
+    @OneToMany(mappedBy = "fkUser")
+    private List<Card> cards;
+    
+    @OneToMany(mappedBy = "fkUser")
+    private List<Interest> categories;
+
+    @OneToMany(mappedBy = "follower")
+    private List<Follower> followers;
+    
+    @OneToMany(mappedBy = "followed")
+    private List<Follower> followed;
+    
+    
     public String getEmail() {
         return email;
     }

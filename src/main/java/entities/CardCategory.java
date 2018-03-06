@@ -23,30 +23,30 @@ public class CardCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCardCategory;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkCard")
-    private Long fkCard;
+    @JoinColumn(name="fkCard",nullable=false)
+    private Card fkCard;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkCategory")
-    private Long fkCategory;
+    @JoinColumn(name="fkCategory",nullable=false)
+    private Category fkCategory;
 
-    public Long getFkCard() {
+    public Card getFkCard() {
         return fkCard;
     }
 
-    public void setFkCard(Long fkCard) {
+    public void setFkCard(Card fkCard) {
         this.fkCard = fkCard;
     }
 
-    public Long getFkCategory() {
+    public Category getFkCategory() {
         return fkCategory;
     }
 
-    public void setFkCategory(Long fkCategory) {
+    public void setFkCategory(Category fkCategory) {
         this.fkCategory = fkCategory;
     }
 

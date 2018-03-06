@@ -6,6 +6,8 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -24,19 +26,27 @@ public class Card implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCard;
+    
+    @Column(nullable=false)
     private String description;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkUser")
-    private Long fkUser;
+    @JoinColumn(name="fkUser",nullable=false)
+    private Users fkUser;
     
-    public Long getFkUser() {
+    @OneToMany(mappedBy = "fkCard")
+    private List<Comment> comments;
+    
+    @OneToMany(mappedBy = "fkCard")
+    private List<Multimedia> multimedia;
+    
+    public Users getFkUser() {
         return fkUser;
     }
 
-    public void setFkUser(Long fkUser) {
+    public void setFkUser(Users fkUser) {
         this.fkUser = fkUser;
     }
 

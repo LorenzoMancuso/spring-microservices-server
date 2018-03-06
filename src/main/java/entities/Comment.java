@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,31 +25,33 @@ public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idComment;
+    
+    @Column(nullable=false)
     private String text;
     
-    @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkCard")
-    private Long fkCard;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="fkCard",nullable=false)
+    private Card fkCard;
     
-    @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="fkUser")
-    private Long fkUser;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="fkUser",nullable=false)
+    private Users fkUser;
 
-    public Long getFkCard() {
+    public Card getFkCard() {
         return fkCard;
     }
 
-    public void setFkCard(Long fkCard) {
+    public void setFkCard(Card fkCard) {
         this.fkCard = fkCard;
     }
 
-    public Long getFkUser() {
+    public Users getFkUser() {
         return fkUser;
     }
 
-    public void setFkUser(Long fkUser) {
+    public void setFkUser(Users fkUser) {
         this.fkUser = fkUser;
     }
 
