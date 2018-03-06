@@ -3,6 +3,13 @@
   <persistence-unit name="com.example_basic_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>entities.Users</class>
+    <class>entities.Category</class>
+    <class>entities.Card</class>
+    <class>entities.Comment</class>
+    <class>entities.Follower</class>
+    <class>entities.Interest</class>
+    <class>entities.CardCategory</class>
+    <class>entities.Multimedia</class>
     <properties>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-54-246-108-119.eu-west-1.compute.amazonaws.com:5432/doqkgikk800je?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory"/>

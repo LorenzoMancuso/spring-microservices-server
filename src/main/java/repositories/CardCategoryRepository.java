@@ -10,9 +10,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  *
- * @author lorenzo
+ * @author luca_universita
  */
-@RepositoryRestResource(collectionResourceRel = "users", path = "users")
-public interface UserRepository extends CrudRepository<entities.Users, Long> {
+@RepositoryRestResource(collectionResourceRel = "cardcategory", path = "cardscategories")
+public interface CardCategoryRepository extends CrudRepository<entities.CardCategory, Long> {
     
 }
