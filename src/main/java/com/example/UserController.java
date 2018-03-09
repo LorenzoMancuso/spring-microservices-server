@@ -5,24 +5,13 @@
  */
 package com.example;
 
-//import java.util.List;
-
-/*import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;*/
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-/*import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;*/
 
 //added
 import repositories.UserRepository;
 import entities.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Autowired;
 /**
  *
  * @author lorenzo
@@ -51,29 +40,16 @@ public class UserController {
         return result;
     }
     
-    /*@RequestMapping(method = GET)
-    public List<Object> list() {
-        return null;
-    }
-    
-    @RequestMapping(value = "/{id}", method = GET)
-    public Object get(@PathVariable String id) {
-        return null;
-    }
-    
-    @RequestMapping(value = "/{id}", method = PUT)
-    public ResponseEntity<?> put(@PathVariable String id, @RequestBody Object input) {
-        return null;
-    }
-    
-    @RequestMapping(value = "/{id}", method = POST)
-    public ResponseEntity<?> post(@PathVariable String id, @RequestBody Object input) {
-        return null;
-    }
-    
-    @RequestMapping(value = "/{id}", method = DELETE)
-    public ResponseEntity<Object> delete(@PathVariable String id) {
-        return null;
-    }*/
+    //1) ricerca di un user per id
+    //2) autenticazione
+    //3) inserire una categoria preferita (interessi)
+    //4) aggiungere un utente alla lista dei followed
+    //5) scaricare la lista di card relativa ai followed legate alle categorie di interesse
+    //6) inserire una valutazione ad una card
+    //7) scaricare statistiche account
+    //8) scaricare la lista degli interessi
+    //9) modifica informazioni account
+    //10) rimuovere una card da quelle preferite
+    //11) rimuovere un utente dai followed
     
 }
