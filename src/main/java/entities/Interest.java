@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,6 +34,9 @@ public class Interest implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fkCategory",nullable=false)
     private Category fkCategory;
+    
+    @Column(nullable=false)
+    private long timestamp;
 
     public Users getFkUser() {
         return fkUser;

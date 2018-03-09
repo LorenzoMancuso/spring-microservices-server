@@ -32,6 +32,9 @@ public class Card implements Serializable {
     @Column(nullable=false)
     private String description;
     
+    @Column(nullable=false)
+    private long timestamp;
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fkUser",nullable=false)
     private Users fkUser;
@@ -41,6 +44,13 @@ public class Card implements Serializable {
     
     @OneToMany(mappedBy = "fkCard")
     private List<Multimedia> multimedia;
+    
+    @OneToMany(mappedBy = "fkCard")
+    private List<CardCategory> categories;
+    
+    @OneToMany(mappedBy = "fkCard")
+    private List<Rating> ratings;
+    
     
     public Users getFkUser() {
         return fkUser;

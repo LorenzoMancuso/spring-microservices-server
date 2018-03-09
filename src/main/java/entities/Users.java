@@ -24,13 +24,34 @@ public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idUser;
     
     @Column(nullable=false)
     private String username;
 
     @Column(nullable=false)
     private String email;
+    
+    @Column(nullable=false)
+    private String surname;
+    
+    @Column(nullable=false)
+    private String name;
+    
+    @Column(nullable=false)
+    private long birthDate;
+    
+    @Column(nullable=false)
+    private String country;
+    
+    @Column(nullable=false)
+    private String city;
+    
+    @Column(nullable=false)
+    private String profession;
+    
+    @Column(nullable=false)
+    private long subscriptionDate;
     
     @OneToMany(mappedBy = "fkUser")
     private List<Card> cards;
@@ -61,18 +82,18 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdUser() {
+        return idUser;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdUser(Long id) {
+        this.idUser = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (idUser != null ? idUser.hashCode() : 0);
         return hash;
     }
 
@@ -83,7 +104,7 @@ public class Users implements Serializable {
             return false;
         }
         Users other = (Users) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser))) {
             return false;
         }
         return true;
@@ -91,7 +112,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.UserEntity[ id=" + id + " ]";
+        return "entities.UserEntity[ id=" + idUser + " ]";
     }
     
 }

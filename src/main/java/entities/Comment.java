@@ -31,6 +31,9 @@ public class Comment implements Serializable {
     @Column(nullable=false)
     private String text;
     
+    @Column(nullable=false)
+    private long timestamp;
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fkCard",nullable=false)
     private Card fkCard;
