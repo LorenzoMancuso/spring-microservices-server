@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  * @author luca_universita
  */
-@RepositoryRestResource(collectionResourceRel = "follower", path = "followers")
+@RepositoryRestResource(collectionResourceRel = "follower", path = "follower")
 public interface FollowerRepository extends CrudRepository<entities.Follower, Long> {
     
 }

@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  * @author luca_universita
  */
-@RepositoryRestResource(collectionResourceRel = "comment", path = "comments")
+@RepositoryRestResource(collectionResourceRel = "comment", path = "comment")
 public interface CommentRepository extends CrudRepository<entities.Comment, Long> {
     
 }

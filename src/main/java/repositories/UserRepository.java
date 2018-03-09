@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  * @author lorenzo
  */
-@RepositoryRestResource(collectionResourceRel = "users", path = "users")
+@RepositoryRestResource(collectionResourceRel = "users", path = "user")
 public interface UserRepository extends CrudRepository<entities.Users, Long> {
     
 }
