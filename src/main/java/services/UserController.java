@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 //added
 import repositories.UserRepository;
 import entities.Users;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  *
  * @author lorenzo
@@ -38,6 +42,22 @@ public class UserController {
     public String count(){
         String result = "COUNT: "+userRepository.count();
         return result;
+    }
+    
+    @RequestMapping(/*method = GET,*/ value = "/get-user/{id}")
+    public String getUser(@PathVariable Long id ){
+        return userRepository.findOne(id).toString();
+    }
+    
+    @RequestMapping(/*method = GET,*/ value = "/count-name/{name}")
+    public String countUserByName(@PathVariable String name ){
+        return userRepository.countByName(name).toString();
+    }
+    
+    @RequestMapping(/*method = GET,*/ value = "/find-name/{name}")
+    public ArrayList getUserByName(@PathVariable String name ){
+        ArrayList<Users> usersList= userRepository.findDistinctUsersByName(name);
+        return usersList;
     }
     
     //1) ricerca di un user per id

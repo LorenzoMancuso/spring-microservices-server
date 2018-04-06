@@ -64,7 +64,94 @@ public class Users implements Serializable {
     
     @OneToMany(mappedBy = "followed")
     private List<Follower> followed;
-    
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(long birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public long getSubscriptionDate() {
+        return subscriptionDate;
+    }
+
+    public void setSubscriptionDate(long subscriptionDate) {
+        this.subscriptionDate = subscriptionDate;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    public List<Interest> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Interest> categories) {
+        this.categories = categories;
+    }
+
+    public List<Follower> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Follower> followers) {
+        this.followers = followers;
+    }
+
+    public List<Follower> getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(List<Follower> followed) {
+        this.followed = followed;
+    }
     
     public String getEmail() {
         return email;
