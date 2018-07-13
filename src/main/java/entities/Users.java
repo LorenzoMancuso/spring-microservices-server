@@ -59,6 +59,18 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "fkUser")
     private List<Interest> categories;
 
+    public void setCategories(List<Interest> categories) {
+        this.categories = categories;
+    }
+    
+    public void addInterest(Interest interest){
+        this.categories.add(interest);        
+    }
+
+    public List<Interest> getCategories() {
+        return categories;
+    }
+
     @OneToMany(mappedBy = "follower")
     private List<Follower> followers;
     
