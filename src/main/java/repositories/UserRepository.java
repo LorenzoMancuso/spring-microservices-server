@@ -5,6 +5,8 @@
  */
 package repositories;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -14,5 +16,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(collectionResourceRel = "users", path = "user")
 public interface UserRepository extends CrudRepository<entities.Users, Long> {
-    
+    entities.Users findOne(Long idUser);   
+    Long countByName(String name);
+    ArrayList<entities.Users> findDistinctUsersByName(String name);
+
 }
