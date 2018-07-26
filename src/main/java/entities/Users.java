@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.json.Json;
 
 /**
  *
@@ -58,24 +59,20 @@ public class Users implements Serializable {
     
     @OneToMany(mappedBy = "fkUser")
     private List<Interest> categories;
+    
+    @OneToMany(mappedBy = "followed")
+    private List<Follower> followers;
+    
+    @OneToMany(mappedBy = "follower")
+    private List<Follower> followed;
 
     public void setCategories(List<Interest> categories) {
         this.categories = categories;
-    }
-    
-    public void addInterest(Interest interest){
-        this.categories.add(interest);        
     }
 
     public List<Interest> getCategories() {
         return categories;
     }
-
-    @OneToMany(mappedBy = "follower")
-    private List<Follower> followers;
-    
-    @OneToMany(mappedBy = "followed")
-    private List<Follower> followed;
 
     public String getSurname() {
         return surname;
@@ -141,14 +138,6 @@ public class Users implements Serializable {
         this.cards = cards;
     }
 
-    public List<Interest> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Interest> categories) {
-        this.categories = categories;
-    }
-
     public List<Follower> getFollowers() {
         return followers;
     }
@@ -211,7 +200,26 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.UserEntity[ id=" + idUser + " ]";
+        return Json.createObjectBuilder()
+            .add("idUser", idUser)
+            .add("username", username)
+            .add("email", email)
+            .add("surname", surname)
+            .add("name", name)
+            .add("birthDate", birthDate)
+            .add("country", country)
+            .add("city", city)
+            .add("profession", profession)
+            .add("subscriptionDate", subscriptionDate)            
+            .build()
+            .toString();
     }
     
+    public void addInterest(Interest interest){
+        this.categories.add(interest);        
+    }
+    
+    public void addFollowed(Follower followed){
+        this.followed.add(followed);        
+    }
 }

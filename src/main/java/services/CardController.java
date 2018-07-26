@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/cards")
 public class CardController {
-    //1) aggiunta nuova card
-    //2) aggiunta nuovo commento
-    //3) aggiunta nuova valutazione (forse in user)
-    //4) modifica della card
-    //5) scaricare tutte le card di una determinata categoria
-    //6) scaricare una lista di card in base agli id utente
-    //7) rimuovere una card
+    
+    //1) aggiunta nuova card con eventuale multimedia (card+cardCategory+Multimedia+User)
+    //2) aggiunta nuovo commento (card+Comment+User)
+    //3) aggiunta nuova valutazione (card+Rating+User)
+    //4) (NON NECESSARIA) modifica della card
+    //5) scaricare tutte le card di una determinata categoria (card+cardCategory+Multimedia+Rating)
+    //6) (NON NECESSARIA) rimuovere una card
+    //7) scaricare la lista di card relativa ai followed legate alle categorie di interesse dell'user (card+cardCategory+Multimedia+Rating+User)
+    //8) card più popolari (card+cardCategory+Multimedia+Rating)
     
 }
