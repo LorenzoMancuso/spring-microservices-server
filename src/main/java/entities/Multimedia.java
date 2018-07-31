@@ -6,6 +6,8 @@
 package entities;
 
 import java.io.Serializable;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,13 +31,35 @@ public class Multimedia implements Serializable {
     private Long idMultimedia;
     
     @Lob
-    @Column(nullable=false)
+    @Column
     private byte[] data;
+    
+    @Column(nullable=false)
+    private String link;
+    
+    @Column(nullable=false)
+    private String type;
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fkCard",nullable=false)
     private Card fkCard;
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
     public byte[] getData() {
         return data;
     }
@@ -82,7 +106,15 @@ public class Multimedia implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Multimedia[ id=" + idMultimedia + " ]";
+        return toJson().toString();
+    }
+    
+    public JsonObject toJson() {
+        return Json.createObjectBuilder()
+            .add("idMultimedia", idMultimedia)
+            .add("link", link)
+            .add("type", type)
+            .build();
     }
     
 }

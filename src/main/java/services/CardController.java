@@ -5,9 +5,11 @@
  */
 package services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import repositories.CardRepository;
 
 /**
  *
@@ -17,6 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cards")
 public class CardController {
     
+    @Autowired
+    CardRepository cardRepository;
+    
+    //***GET CARD***
+    @RequestMapping(/*method = GET,*/ value = "/get-card")
+    public String getUser(Long id){
+        return cardRepository.findOne(id).toString();
+    }
     //1) aggiunta nuova card con eventuale multimedia (card+cardCategory+Multimedia+User)
     //2) aggiunta nuovo commento (card+Comment+User)
     //3) aggiunta nuova valutazione (card+Rating+User)

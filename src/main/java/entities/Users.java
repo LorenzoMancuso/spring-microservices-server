@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  *
@@ -200,6 +204,42 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
+        JsonObjectBuilder obj=Json.createObjectBuilder()
+            .add("idUser", idUser)
+            .add("username", username)
+            .add("email", email)
+            .add("surname", surname)
+            .add("name", name)
+            .add("birthDate", birthDate)
+            .add("country", country)
+            .add("city", city)
+            .add("profession", profession)
+            .add("subscriptionDate", subscriptionDate);         
+        
+        JsonArrayBuilder localFollowers = Json.createArrayBuilder();
+        for(Follower follower:followers){
+            localFollowers.add(follower.getFollower().toJson());
+        }
+        obj.add("followers",localFollowers.build());
+        
+        JsonArrayBuilder localFollowed=Json.createArrayBuilder();
+        for(Follower followed:followed){
+            localFollowed.add(followed.getFollowed().toJson());
+        }
+        obj.add("followed",localFollowed.build());
+        
+        JsonArrayBuilder localInterests=Json.createArrayBuilder();
+        for(Interest interest:categories){
+            localInterests.add(interest.getFkCategory().toJson());
+        }
+        obj.add("interests",localInterests.build());
+        
+        return obj
+            .build()
+            .toString();
+    }
+
+    public JsonObject toJson() {
         return Json.createObjectBuilder()
             .add("idUser", idUser)
             .add("username", username)
@@ -211,10 +251,8 @@ public class Users implements Serializable {
             .add("city", city)
             .add("profession", profession)
             .add("subscriptionDate", subscriptionDate)            
-            .build()
-            .toString();
-    }
-    
+            .build();
+    }    
     public void addInterest(Interest interest){
         this.categories.add(interest);        
     }
