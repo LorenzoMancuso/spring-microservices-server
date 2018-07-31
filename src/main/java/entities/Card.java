@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -100,7 +101,15 @@ public class Card implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String toString() {      
+        return toJson().toString();
+    }
+    
+    public JsonObject toJson() {
+        return toJsonObjectBuilder().build();
+    }
+    
+    public JsonObjectBuilder toJsonObjectBuilder() {
         JsonObjectBuilder obj = Json.createObjectBuilder()
             .add("idCard", idCard)
             .add("description", description)
@@ -131,7 +140,7 @@ public class Card implements Serializable {
         }
         obj.add("ratings",localRatings.build()); 
             
-        return obj.build().toString();
+        return obj;
     }
     
 }
