@@ -61,6 +61,14 @@ public class Follower implements Serializable {
     public void setIdFollower(Long id) {
         this.idFollower = id;
     }
+    
+    public Long getFollowDate() {
+        return followDate;
+    }
+
+    public void setFollowDate(Long timestamp) {
+        this.followDate = timestamp;
+    }
 
     @Override
     public int hashCode() {

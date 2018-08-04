@@ -6,6 +6,8 @@
 package entities;
 
 import java.io.Serializable;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -65,6 +67,22 @@ public class Rating implements Serializable {
     public void setFkUser(Users fkUser) {
         this.fkUser = fkUser;
     }
+    
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     @Override
     public int hashCode() {
@@ -88,7 +106,17 @@ public class Rating implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Interest[ id=" + idRating + " ]";
+        return toJson().toString();
+    }
+    
+    public JsonObject toJson() {
+        return Json.createObjectBuilder()
+            .add("idRating", idRating)
+            .add("value", value)
+            .add("timestamp", timestamp)
+            .add("user", fkUser.toJson())
+            .add("card", fkCard.getIdCard())
+            .build();
     }
     
 }

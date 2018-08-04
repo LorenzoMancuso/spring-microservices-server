@@ -7,6 +7,10 @@ package entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +38,7 @@ public class Card implements Serializable {
     
     @Column(nullable=false)
     private long timestamp;
-    
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fkUser",nullable=false)
     private Users fkUser;
@@ -75,6 +79,14 @@ public class Card implements Serializable {
     public void setIdCard(Long id) {
         this.idCard = id;
     }
+    
+     public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     @Override
     public int hashCode() {
@@ -97,8 +109,46 @@ public class Card implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "entities.Card[ id=" + idCard + " ]";
+    public String toString() {      
+        return toJson().toString();
+    }
+    
+    public JsonObject toJson() {
+        return toJsonObjectBuilder().build();
+    }
+    
+    public JsonObjectBuilder toJsonObjectBuilder() {
+        JsonObjectBuilder obj = Json.createObjectBuilder()
+            .add("idCard", idCard)
+            .add("description", description)
+            .add("timestamp", timestamp)
+            .add("user", fkUser.toJson());
+                
+        JsonArrayBuilder localComments= Json.createArrayBuilder();
+        for(Comment comment:comments){
+            localComments.add(comment.toJson());
+        }
+        obj.add("comments",localComments.build());    
+
+        JsonArrayBuilder localMultimedia= Json.createArrayBuilder();
+        for(Multimedia mlt:multimedia){
+            localMultimedia.add(mlt.toJson());
+        }
+        obj.add("multimedia",localMultimedia.build());    
+
+        JsonArrayBuilder localCategories= Json.createArrayBuilder();
+        for(CardCategory cardCategory:categories){
+            localCategories.add(cardCategory.getFkCategory().toJson());
+        }
+        obj.add("categories",localCategories.build()); 
+
+        JsonArrayBuilder localRatings= Json.createArrayBuilder();
+        for(Rating rating:ratings){
+            localRatings.add(rating.toJson());
+        }
+        obj.add("ratings",localRatings.build()); 
+            
+        return obj;
     }
     
 }

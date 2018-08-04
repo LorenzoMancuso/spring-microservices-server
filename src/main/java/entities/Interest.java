@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import javax.json.Json;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -84,7 +85,12 @@ public class Interest implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Interest[ id=" + idInterest + " ]";
+        return Json.createObjectBuilder()
+            .add("idInterest", idInterest)
+            .add("user", fkUser.toJson())
+            .add("category", fkCategory.toString())
+            .build()
+            .toString();
     }
     
 }
