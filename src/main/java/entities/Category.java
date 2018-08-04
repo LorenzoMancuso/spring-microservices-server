@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -76,10 +77,14 @@ public class Category implements Serializable {
     }
     
     public JsonObject toJson() {
+        return toJsonObjectBuilder()
+            .build();
+    }
+    
+    public JsonObjectBuilder toJsonObjectBuilder() {
         return Json.createObjectBuilder()
             .add("idCategory", idCategory)
-            .add("name", name)
-            .build();
+            .add("name", name);
     }
     
 }

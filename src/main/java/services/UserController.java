@@ -184,8 +184,8 @@ public class UserController {
     //***5) rimuovere un interest
     //***6) aggiungere un utente alla lista dei followed
     //***7) rimuovere un utente dai followed
-    //8) scaricare la lista di followed (? IN GET USER)
-    //9) scaricare la lista di follower (? IN GET USER)
+    //***8) scaricare la lista di followed (? IN GET USER)
+    //***9) scaricare la lista di follower (? IN GET USER)
     //11) (BISOGNA DEFINIRE LE STATISTICHE) scaricare statistiche account
     //12) (NON NECESSARIA) modifica informazioni account
     
