@@ -38,7 +38,7 @@ public class Card implements Serializable {
     
     @Column(nullable=false)
     private long timestamp;
-    
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="fkUser",nullable=false)
     private Users fkUser;
@@ -78,6 +78,14 @@ public class Card implements Serializable {
 
     public void setIdCard(Long id) {
         this.idCard = id;
+    }
+    
+     public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override

@@ -67,6 +67,22 @@ public class Rating implements Serializable {
     public void setFkUser(Users fkUser) {
         this.fkUser = fkUser;
     }
+    
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     @Override
     public int hashCode() {

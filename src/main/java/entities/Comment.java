@@ -67,6 +67,14 @@ public class Comment implements Serializable {
     public void setText(String text) {
         this.text = text;
     }
+    
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public Long getIdComment() {
         return idComment;
