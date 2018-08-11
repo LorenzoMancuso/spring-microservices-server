@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,21 +19,26 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
  * @author lorenzo
  */
 @Entity
-public class Users implements Serializable {
+public class Users implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
     
-    @Column(nullable=false)
+    @Column(name = "username", nullable=false)
     private String username;
+    
+    @Column(name = "password", nullable=false)
+    private String password;
 
     @Column(nullable=false)
     private String email;
@@ -58,6 +64,10 @@ public class Users implements Serializable {
     @Column(nullable=false)
     private long subscriptionDate;
     
+    // Oauth2 utility
+    @Column(nullable = false)
+    private boolean enabled;
+
     @OneToMany(mappedBy = "fkUser")
     private List<Card> cards;
     
@@ -165,13 +175,23 @@ public class Users implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
+    @Override
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getIdUser() {
@@ -259,5 +279,35 @@ public class Users implements Serializable {
     
     public void addFollowed(Follower followed){
         this.followed.add(followed);        
+    }
+    
+
+    // Oauth2 utilities
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+            List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+            return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+            return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+            // we never lock accounts
+            return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+            // credentials never expire
+            return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+            return enabled;
     }
 }

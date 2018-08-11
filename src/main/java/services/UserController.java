@@ -20,6 +20,9 @@ import entities.Interest;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import repositories.FollowerRepository;
@@ -29,7 +32,7 @@ import repositories.FollowerRepository;
  */
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserController{
     @Autowired
     UserRepository userRepository;
     
@@ -75,11 +78,6 @@ public class UserController {
         return userRepository.countByName(name).toString();
     }
     
-    @RequestMapping(/*method = GET,*/ value = "/find-name/{name}")
-    public ArrayList getUserByName(@PathVariable String name ){
-        ArrayList<Users> usersList= userRepository.findDistinctUsersByName(name);
-        return usersList;
-    }
     //***END HELPER METHODS***
 
     //***1) GET USER***
