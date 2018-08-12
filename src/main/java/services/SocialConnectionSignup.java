@@ -17,7 +17,7 @@ import repositories.UserRepository;
  * @author lore
  */
 @Service
-class FacebookConnectionSignup implements ConnectionSignUp {
+class SocialConnectionSignup implements ConnectionSignUp {
  
     @Autowired
     private UserRepository userRepository;

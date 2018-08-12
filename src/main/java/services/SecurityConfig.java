@@ -15,8 +15,6 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInController;
-import org.springframework.social.security.SocialUserDetailsService;
-import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  *
@@ -32,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private UsersConnectionRepository usersConnectionRepository;
  
     @Autowired
-    private FacebookConnectionSignup facebookConnectionSignup;
+    private SocialConnectionSignup facebookConnectionSignup;
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,10 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         .anyRequest().authenticated()
         .and()
         .formLogin().loginPage("/login").permitAll();
-        /*.and()
-        .apply(new SpringSocialConfigurer()
-            .postLoginUrl("/")
-            .alwaysUsePostLoginUrl(true));*/
     } 
  
     @Bean
@@ -57,11 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return new ProviderSignInController(
           connectionFactoryLocator, 
           usersConnectionRepository, 
-          new FacebookSignInAdapter());
+          new SocialSignInAdapter());
     }
-    
-    /*@Bean
-    public SocialUserDetailsService socialUsersDetailService() {
-        return new SimpleSocialUsersDetailService(userDetailsService());
-    }*/
 }
