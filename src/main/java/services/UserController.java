@@ -17,14 +17,9 @@ import entities.Users;
 import entities.Category;
 import entities.Follower;
 import entities.Interest;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import repositories.FollowerRepository;
 /**
  *
