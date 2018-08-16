@@ -12,8 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EntityScan(basePackages = { "entities" }) 
 @EnableJpaRepositories(basePackages = { "repositories" })
 @SpringBootApplication
-@EnableResourceServer
-@ComponentScan(basePackages = { "services" }) 
 public class BasicApplication {
     
     public static void main(String[] args) {

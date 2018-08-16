@@ -17,8 +17,11 @@ import entities.Users;
 import entities.Category;
 import entities.Follower;
 import entities.Interest;
+import java.io.IOException;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import repositories.FollowerRepository;
 /**

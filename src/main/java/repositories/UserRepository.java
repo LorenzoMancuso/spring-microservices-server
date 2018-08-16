@@ -6,9 +6,9 @@
 package repositories;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
@@ -21,6 +21,11 @@ public interface UserRepository extends JpaRepository<entities.Users, Long> {
     entities.Users findOne(Long idUser);   
     Long countByName(String name);
     ArrayList<entities.Users> findDistinctUsersByName(String name);
-    entities.Users findOneByUsername(String username);
+    
+    @Query( "select u from Users u where u.username=:username")
+    entities.Users findOneByUsername(@Param("username")String username);
+    
+    entities.Users findOneByEmail(String email);
+
 
 }
