@@ -19,6 +19,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,21 +36,21 @@ public class SocialSignInAdapter implements SignInAdapter{
     UserRepository userRepo;
     @Override
     public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
-         
-        SecurityContextHolder.getContext().setAuthentication(
-          new UsernamePasswordAuthenticationToken(
+        
+        UsernamePasswordAuthenticationToken token=new UsernamePasswordAuthenticationToken(
           connection.getDisplayName(), null, 
-          Arrays.asList(new SimpleGrantedAuthority("USER"))));
+          Arrays.asList(new SimpleGrantedAuthority("USER")));
+        
+        ConnectionKey key=connection.getKey();
+        SecurityContextHolder.getContext().setAuthentication(token);
+        System.out.println(request.getSessionId());
+        
         //Service code
-        System.out.println(localUserId);
-        Cookie myCookie =  new Cookie("localUserId", localUserId);  
-        request.getNativeResponse(HttpServletResponse.class).addCookie(myCookie);
+        System.out.println(localUserId);        
+        System.out.println(token);
+        String jwt=connection.createData().getAccessToken();
+        System.out.println(jwt);
         
-        //added
-        
-        // -added-
-        
-        //return "http://192.168.1.5:4200?id="+localUserId+"&connection="+connection;
-        return null;
+        return "http://192.168.1.20:4200/"+localUserId+"/"+request.getSessionId();
     }
 }

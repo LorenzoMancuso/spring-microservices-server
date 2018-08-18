@@ -18,9 +18,14 @@ import entities.Category;
 import entities.Follower;
 import entities.Interest;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import repositories.FollowerRepository;
@@ -29,6 +34,7 @@ import repositories.FollowerRepository;
  * @author lorenzo
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 public class UserController{
     @Autowired
@@ -156,6 +162,29 @@ public class UserController{
             }
         }
         return "Error";
+    }
+    
+    //***9) UPDATE USER INFO***
+    @RequestMapping(/*method = GET,*/ value = "/update-user")
+    public String updateUser(String jsonObjectStr){
+        
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonObjectStr));
+        JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+        
+        Users user=userRepository.findOne(object.getJsonNumber("idUser").longValue());
+        if(user==null)
+            return "Error";
+        
+        user.setUsername(object.getString("username"));
+        user.setName(object.getString("name"));
+        user.setSurname(object.getString("surname"));
+        user.setBirthDate(object.getJsonNumber("idUser").intValue());
+        user.setCountry(object.getString("country"));
+        user.setCity(object.getString("city"));
+        user.setProfession(object.getString("profession"));
+        
+        return userRepository.save(user).toString();
     }
     
     /*/ESEMPIO "Enterprise JavaBeans Query Language"

@@ -17,8 +17,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import repositories.CategoryRepository;
@@ -29,6 +28,7 @@ import repositories.CategoryRepository;
  * @author lorenzo
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/categories")
 public class CategoryController {
     @Autowired

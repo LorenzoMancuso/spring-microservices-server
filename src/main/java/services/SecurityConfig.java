@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
@@ -43,7 +44,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         .csrf().disable()
         .authorizeRequests()
         .antMatchers("/login*","/signin/**","/signup/**").permitAll()
-        .anyRequest().authenticated();
+        .anyRequest().authenticated()
+        .and().logout().permitAll()
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            //.logoutUrl("/logout")
+            .logoutSuccessUrl("/login")
+            .deleteCookies("auth_code", "JSESSIONID")
+            .invalidateHttpSession(true);
+;
         /*.and()
         .formLogin().loginPage("/login").permitAll();*/
     } 
@@ -57,8 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
           connectionFactoryLocator, 
           usersConnectionRepository, 
           new SocialSignInAdapter());
-        
-        controller.setPostSignInUrl("http://192.168.1.5:4200");
+        controller.setPostSignInUrl("http://192.168.1.20:4200");
         return controller;
     }
     
