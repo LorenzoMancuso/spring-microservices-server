@@ -67,8 +67,14 @@ public class CardController {
     
     //***GET CARD***
     @RequestMapping(/*method = GET,*/ value = "/get-card")
-    public String getUser(Long id){
-        return cardRepository.findOne(id).toString();
+    public String getCard(Long id){
+        Object card = cardRepository.findOne(id);
+        
+        JsonObjectBuilder complexCard;
+        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
+        complexCard=((Card)card).toJsonObjectBuilder();
+        
+        return complexCard.build().toString();
     }
     
     //***1) ADD NEW CARD***
@@ -155,13 +161,12 @@ public class CardController {
         Iterator itr = result.iterator();
         while(itr.hasNext()){
             Object[] obj = (Object[]) itr.next();
-            System.out.println(obj.length);
             complexCard=((Card)obj[0]).toJsonObjectBuilder();
             complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
             complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
             localComplexCards.add(complexCard.build());
         }
-
+        
         return localComplexCards.build().toString();
     }
     
@@ -188,15 +193,47 @@ public class CardController {
         Iterator itr = result.iterator();
         while(itr.hasNext()){
             Object[] obj = (Object[]) itr.next();
-            System.out.println(obj.length);
             complexCard=((Card)obj[0]).toJsonObjectBuilder();
             complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
             complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
             localComplexCards.add(complexCard.build());
         }
-        
+         
         return localComplexCards.build().toString();
     }
+    
+    
+    @RequestMapping(/*method = GET,*/ value = "/get-user-cards")
+    public String getUserCards(Long idUser) {
+        //create an ejbql expression SELECT DISTINCT d FROM Department d, Student e WHERE d = e.department"
+        String ejbQL = "SELECT DISTINCT c, COUNT(r) as interestNumber, AVG(r.value) as avgRating "
+                + "FROM Card c, Rating r, Users u "
+                + "WHERE u.idUser=?1 AND c.fkUser=?1 AND r.fkCard=c "
+                + "GROUP BY c "
+                + "ORDER BY 2,3";
+        //create query
+        Query query = entityManager.createQuery(ejbQL);
+        query.setParameter(1,idUser);
+        //execute the query
+        List<Object> result=query.getResultList();
+        
+        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
+        JsonObjectBuilder complexCard;
+        
+        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
+        Iterator itr = result.iterator();
+        while(itr.hasNext()){
+            Object[] obj = (Object[]) itr.next();
+            complexCard=((Card)obj[0]).toJsonObjectBuilder();
+            complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
+            complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
+            localComplexCards.add(complexCard.build());
+        }
+         
+        return localComplexCards.build().toString();
+    }
+    
+    
     
     //***7) GET ALL followed CARD in interest***
     @RequestMapping(/*method = GET,*/ value = "/get-popular-cards")
@@ -221,7 +258,6 @@ public class CardController {
         Iterator itr = result.iterator();
         while(itr.hasNext()){
             Object[] obj = (Object[]) itr.next();
-            System.out.println(obj.length);
             complexCard=((Card)obj[0]).toJsonObjectBuilder();
             complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
             complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
