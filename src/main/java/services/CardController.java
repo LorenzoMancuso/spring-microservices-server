@@ -14,6 +14,7 @@ import entities.Multimedia;
 import entities.Rating;
 import entities.Users;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import javax.json.Json;
@@ -79,42 +80,44 @@ public class CardController {
     
     //***1) ADD NEW CARD***
     @RequestMapping(/*method = POST,*/ value = "/add-new-card")
-    public String addCard(@RequestBody String description, @RequestBody String[] multimedia, @RequestBody Long[] categories){
-        String result="";
+    public String addCard(/*@RequestBody*/ String description, /*@RequestBody*/ String[] multimedia, /*@RequestBody*/ Long[] categories, Long idUser){
         //create new card and set attributes
         Card newCard= new Card();
         newCard.setDescription(description);
+        newCard.setFkUser(userRepository.findOne(idUser));
         long unixTime = System.currentTimeMillis() / 1000L;
         newCard.setTimestamp(unixTime);
-        result+=cardRepository.save(newCard).toString();//save card
-        System.out.println(result);
         
+        Card result = cardRepository.save(newCard);//save card
+
         //associate category to the new card
         CardCategory tmpCC;
         for(Long idCategory:categories){
             tmpCC=new CardCategory();
-            tmpCC.setFkCard(newCard);
+            tmpCC.setFkCard(result);
             tmpCC.setFkCategory(categoryRepository.findOne(idCategory));
-            result+="\n"+cardCategoryRepository.save(tmpCC).toString();//save card category
-            System.out.println(result);
+            cardCategoryRepository.save(tmpCC);//save card category
         }
         
         //associate multimedia to the new card
         Multimedia tmpMultimedia;
         for(String link:multimedia){
             tmpMultimedia=new Multimedia();
-            tmpMultimedia.setFkCard(newCard);
+            tmpMultimedia.setFkCard(result);
             tmpMultimedia.setLink(link);            
             tmpMultimedia.setType("IMAGE");
-            result+="\n"+multimediaRepository.save(tmpMultimedia).toString();//save card multimedia
-            System.out.println(result);
+            multimediaRepository.save(tmpMultimedia);//save card multimedia
         }
-        return result;
+        
+        JsonObjectBuilder complexCard = Json.createObjectBuilder();
+        complexCard.add("idCard", result.getIdCard());
+        
+        return complexCard.build().toString();
     }
     
     //***2) ADD NEW COMMENT***
     @RequestMapping(/*method = POST,*/ value = "/add-new-comment")
-    public String addComment(@RequestBody String comment, @RequestBody Long idCard, @RequestBody Long idUser){
+    public String addComment(/*@RequestBody*/ String comment, /*@RequestBody*/ Long idCard, /*@RequestBody*/ Long idUser){
         //create new comment and set attributes
         Comment newComment= new Comment();
         newComment.setText(comment);
@@ -127,7 +130,7 @@ public class CardController {
     
     //***3) ADD NEW RATING***
     @RequestMapping(/*method = POST,*/ value = "/add-new-rating")
-    public String addRating(@RequestBody float rating, @RequestBody Long idCard, @RequestBody Long idUser){
+    public String addRating(/*@RequestBody*/ float rating, /*@RequestBody*/ Long idCard, /*@RequestBody*/ Long idUser){
         //create new comment and set attributes
         Rating newRating= new Rating();
         newRating.setValue(rating);
