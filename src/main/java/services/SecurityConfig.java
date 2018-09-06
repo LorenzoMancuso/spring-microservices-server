@@ -5,22 +5,18 @@
  */
 package services;
 
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInController;
-import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  *
@@ -43,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http
         .csrf().disable()
         .authorizeRequests()
+        .antMatchers(HttpMethod.OPTIONS).permitAll()//allow CORS option calls
         .antMatchers("/login*","/signin/**","/signup/**").permitAll()
         .anyRequest().authenticated()
         .and().logout().permitAll()

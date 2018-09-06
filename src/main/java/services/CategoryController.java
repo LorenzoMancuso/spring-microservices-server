@@ -82,6 +82,7 @@ public class CategoryController {
         while(itr.hasNext()){
             Object[] obj = (Object[]) itr.next();
             complexCategory=((Category)obj[0]).toJsonObjectBuilder();
+            System.out.println(((Category)obj[0]).toString());
             complexCategory.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
             localComplexCategories.add(complexCategory.build());
         }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.servlet.http.HttpServletResponse;
@@ -53,14 +54,12 @@ public class UserController{
     
     @RequestMapping(/*method = GET,*/ value = "/findall")
     public String findAll(){
-        String result = "";
-
-        System.out.println(userRepository.findAll());
+        JsonArrayBuilder localUsers = Json.createArrayBuilder();
         
         for(Users cust : userRepository.findAll()){
-            result += cust + "<br>";
+            localUsers.add(cust.toJsonObjectBuilder());
         }
-        return result;
+        return localUsers.build().toString();
     }
     
     @RequestMapping(/*method = GET,*/ value = "/count")

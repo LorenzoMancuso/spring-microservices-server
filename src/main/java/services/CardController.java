@@ -15,6 +15,7 @@ import entities.Rating;
 import entities.Users;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.json.Json;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.RestController;
 import repositories.CardCategoryRepository;
 
@@ -116,9 +118,13 @@ public class CardController {
     }
     
     //***2) ADD NEW COMMENT***
-    @RequestMapping(/*method = POST,*/ value = "/add-new-comment")
+    @RequestMapping(method = POST, value = "/add-new-comment")
     public String addComment(/*@RequestBody*/ String comment, /*@RequestBody*/ Long idCard, /*@RequestBody*/ Long idUser){
         //create new comment and set attributes
+        System.out.println(comment);
+        System.out.println(idCard);
+        System.out.println(idUser);
+
         Comment newComment= new Comment();
         newComment.setText(comment);
         long unixTime = System.currentTimeMillis() / 1000L;
@@ -146,29 +152,25 @@ public class CardController {
     //https://www.tutorialspoint.com/ejb/ejb_query_language.htm
     @RequestMapping(/*method = GET,*/ value = "/get-category-cards")
     public String getCategoryCards(Long idCategory) {
+        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
+        List<Object> result;
+        ArrayList params = new ArrayList();
+        params.add(idCategory);
+        
         //create an ejbql expression SELECT DISTINCT d FROM Department d, Student e WHERE d = e.department"
         String ejbQL = "SELECT DISTINCT c, COUNT(r) as interestNumber, AVG(r.value) as avgRating "
                 + "FROM Card c, CardCategory ct, Rating r "
                 + "WHERE ct.fkCategory.idCategory=?1 AND ct.fkCategory MEMBER OF c.categories AND r.fkCard=c "
                 + "GROUP BY c "
                 + "ORDER BY 2,3";
-        //create query
-        Query query = entityManager.createQuery(ejbQL);
-        query.setParameter(1,idCategory);
-        //execute the query
-        List<Object> result=query.getResultList();
+        result=queryExecuter(ejbQL,params); 
+        complexCardIterator(result,localComplexCards);
         
-        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
-        JsonObjectBuilder complexCard;
-        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
-        Iterator itr = result.iterator();
-        while(itr.hasNext()){
-            Object[] obj = (Object[]) itr.next();
-            complexCard=((Card)obj[0]).toJsonObjectBuilder();
-            complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
-            complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
-            localComplexCards.add(complexCard.build());
-        }
+        ejbQL = "SELECT DISTINCT c, 0, 0 "
+                + "FROM Card c, CardCategory ct "
+                + "WHERE ct.fkCategory.idCategory=?1 AND ct.fkCategory MEMBER OF c.categories AND NOT EXISTS (SELECT r1 FROM Rating r1 where r1.fkCard=c) ";
+        result=queryExecuter(ejbQL,params);
+        complexCardIterator(result,localComplexCards);
         
         return localComplexCards.build().toString();
     }
@@ -176,63 +178,56 @@ public class CardController {
     //***7) GET ALL followed CARD in interest***
     @RequestMapping(/*method = GET,*/ value = "/get-followed-cards")
     public String getFollowedCards(Long idUser) {
+        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
+        List<Object> result;
+        ArrayList params = new ArrayList();
+        params.add(idUser);
+        
         //create an ejbql expression SELECT DISTINCT d FROM Department d, Student e WHERE d = e.department"
         String ejbQL = "SELECT DISTINCT c, COUNT(r) as interestNumber, AVG(r.value) as avgRating "
                 + "FROM Card c, Rating r, Users u "
                 + "WHERE u.idUser=?1 AND c.fkUser IN (SELECT f.followed FROM Follower f WHERE f.follower=u) AND "
-                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND r.fkCard=c "
+                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND (r.fkCard=c) "
                 + "GROUP BY c "
                 + "ORDER BY 2,3";
-        //create query
-        Query query = entityManager.createQuery(ejbQL);
-        query.setParameter(1,idUser);
-        //execute the query
-        List<Object> result=query.getResultList();
+        result=queryExecuter(ejbQL,params); 
+        complexCardIterator(result,localComplexCards);
         
-        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
-        JsonObjectBuilder complexCard;
+        ejbQL = "SELECT DISTINCT c, 0, 0 "
+                + "FROM Card c, Users u "
+                + "WHERE u.idUser=?1 AND c.fkUser IN (SELECT f.followed FROM Follower f WHERE f.follower=u) AND "
+                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND NOT EXISTS (SELECT r1 FROM Rating r1 where r1.fkCard=c) ";
+
+        result=queryExecuter(ejbQL,params);
+        complexCardIterator(result,localComplexCards);
         
-        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
-        Iterator itr = result.iterator();
-        while(itr.hasNext()){
-            Object[] obj = (Object[]) itr.next();
-            complexCard=((Card)obj[0]).toJsonObjectBuilder();
-            complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
-            complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
-            localComplexCards.add(complexCard.build());
-        }
-         
         return localComplexCards.build().toString();
     }
     
     
     @RequestMapping(/*method = GET,*/ value = "/get-user-cards")
     public String getUserCards(Long idUser) {
+        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
+        List<Object> result;
+        ArrayList params = new ArrayList();
+        params.add(idUser);
+        
         //create an ejbql expression SELECT DISTINCT d FROM Department d, Student e WHERE d = e.department"
         String ejbQL = "SELECT DISTINCT c, COUNT(r) as interestNumber, AVG(r.value) as avgRating "
                 + "FROM Card c, Rating r, Users u "
                 + "WHERE u.idUser=?1 AND c.fkUser=?1 AND r.fkCard=c "
                 + "GROUP BY c "
                 + "ORDER BY 2,3";
-        //create query
-        Query query = entityManager.createQuery(ejbQL);
-        query.setParameter(1,idUser);
-        //execute the query
-        List<Object> result=query.getResultList();
+        result=queryExecuter(ejbQL,params); 
+        complexCardIterator(result,localComplexCards);
         
-        JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
-        JsonObjectBuilder complexCard;
+        ejbQL = "SELECT DISTINCT c, 0, 0 "
+                + "FROM Card c, Users u "
+                + "WHERE u.idUser=?1 AND c.fkUser=?1 AND "
+                + "NOT EXISTS (SELECT r1 FROM Rating r1 where r1.fkCard=c) ";
+        result=queryExecuter(ejbQL,params);
+        complexCardIterator(result,localComplexCards);
         
-        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
-        Iterator itr = result.iterator();
-        while(itr.hasNext()){
-            Object[] obj = (Object[]) itr.next();
-            complexCard=((Card)obj[0]).toJsonObjectBuilder();
-            complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
-            complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
-            localComplexCards.add(complexCard.build());
-        }
-         
         return localComplexCards.build().toString();
     }
     
@@ -241,34 +236,59 @@ public class CardController {
     //***7) GET ALL followed CARD in interest***
     @RequestMapping(/*method = GET,*/ value = "/get-popular-cards")
     public String getPopularCards(Long idUser) {
-        //create an ejbql expression SELECT DISTINCT d FROM Department d, Student e WHERE d = e.department"
-        String ejbQL = "SELECT DISTINCT c, COUNT(r) as interestNumber, AVG(r.value) as avgRating "
-                + "FROM Card c, Rating r, Users u "
-                + "WHERE u.idUser=?1 AND "
-                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND r.fkCard=c "
-                + "GROUP BY c "
-                + "ORDER BY 2,3";
-        //create query
-        Query query = entityManager.createQuery(ejbQL);
-        query.setParameter(1,idUser);
-        //execute the query
-        List<Object> result=query.getResultList();
-        
         JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
-        JsonObjectBuilder complexCard;
+        List<Object> result;
+        ArrayList params = new ArrayList();
+        params.add(idUser);
         
-        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
-        Iterator itr = result.iterator();
-        while(itr.hasNext()){
-            Object[] obj = (Object[]) itr.next();
-            complexCard=((Card)obj[0]).toJsonObjectBuilder();
-            complexCard.add("interestNumber",Integer.parseInt(String.valueOf(obj[1])));
-            complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
-            localComplexCards.add(complexCard.build());
-        }
+        String ejbQL = "SELECT DISTINCT c, COUNT(r) as ratingNumber, AVG(r.value) as avgRating "
+                + "FROM Card c, Rating r, Users u "
+                + "WHERE u.idUser=?1 "
+                + "AND (EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND r.fkCard=c "
+                + "GROUP BY c "
+                + "ORDER BY 2,3,4";
+        result=queryExecuter(ejbQL,params); 
+        complexCardIterator(result,localComplexCards);
+        
+        ejbQL = "SELECT DISTINCT c, 0, 0 "
+                + "FROM Card c, Users u "
+                + "WHERE u.idUser=?1 AND "
+                + "NOT EXISTS (SELECT r1 FROM Rating r1 where r1.fkCard=c) ";
+        result=queryExecuter(ejbQL,params);
+        complexCardIterator(result,localComplexCards);
         
         return localComplexCards.build().toString();
     }
+    
+    /*****HELPER METHODS*****/    
+    
+    public List<Object> queryExecuter(String queryParam, ArrayList<Long> params){
+        Query query = entityManager.createQuery(queryParam);
+        int i=1;
+        for(Long param: params){
+            query.setParameter(i,param);
+            i++;
+        }
+        //execute the query
+        return query.getResultList();
+    }
+    
+    public void complexCardIterator(List<Object> result, JsonArrayBuilder localComplexCards){
+        JsonObjectBuilder complexCard;
+        Iterator itr = result.iterator();
+        
+        //every iteration is a result of the query made by an array of 3 elements: Card, interestNumber, avgRating
+        while(itr.hasNext()){
+            Object[] obj = (Object[]) itr.next();
+            complexCard=((Card)obj[0]).toJsonObjectBuilder();
+            System.out.println(((Card)obj[0]).toString());
+            complexCard.add("ratingNumber",Integer.parseInt(String.valueOf(obj[1])));
+            complexCard.add("avgRating",Float.parseFloat(String.valueOf(obj[2])));
+
+            localComplexCards.add(complexCard.build());
+        }
+    }
+    /*****END HELPER METHODS*****/
 
     //***1) aggiunta nuova card con eventuale multimedia (card+cardCategory+Multimedia+User)
     //***2) aggiunta nuovo commento (card+Comment+User)

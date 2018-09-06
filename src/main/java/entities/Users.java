@@ -260,6 +260,11 @@ public class Users implements Serializable, UserDetails {
     }
 
     public JsonObject toJson() {
+        return toJsonObjectBuilder()      
+            .build();
+    }    
+    
+    public JsonObjectBuilder toJsonObjectBuilder() {
         return Json.createObjectBuilder()
             .add("idUser", idUser)
             .add("username", username)
@@ -270,9 +275,9 @@ public class Users implements Serializable, UserDetails {
             .add("country", country)
             .add("city", city)
             .add("profession", profession)
-            .add("subscriptionDate", subscriptionDate)            
-            .build();
-    }    
+            .add("subscriptionDate", subscriptionDate);
+    }
+    
     public void addInterest(Interest interest){
         this.categories.add(interest);        
     }
