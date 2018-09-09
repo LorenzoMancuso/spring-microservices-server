@@ -51,6 +51,6 @@ public class SocialSignInAdapter implements SignInAdapter{
         String jwt=connection.createData().getAccessToken();
         System.out.println(jwt);
         
-        return "http://192.168.1.20:4200/"+localUserId+"/"+request.getSessionId();
+        return "http://taass.s3-website-eu-west-1.amazonaws.com/"+localUserId+"/"+request.getSessionId();
     }
 }

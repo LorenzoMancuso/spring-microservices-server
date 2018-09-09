@@ -181,7 +181,9 @@ public class UserController{
         user.setBirthDate(object.getJsonNumber("idUser").intValue());
         user.setCountry(object.getString("country"));
         user.setCity(object.getString("city"));
-        user.setProfession(object.getString("profession"));
+        user.setProfession(object.getString("profession"));        
+        user.setProfileImage(object.getString("profileImage"));
+
         
         return userRepository.save(user).toString();
     }

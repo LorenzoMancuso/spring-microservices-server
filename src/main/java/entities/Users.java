@@ -67,6 +67,9 @@ public class Users implements Serializable, UserDetails {
     // Oauth2 utility
     @Column(nullable = false)
     private boolean enabled;
+    
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @OneToMany(mappedBy = "fkUser")
     private List<Card> cards;
@@ -201,6 +204,14 @@ public class Users implements Serializable, UserDetails {
     public void setIdUser(Long id) {
         this.idUser = id;
     }
+    
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     @Override
     public int hashCode() {
@@ -234,7 +245,8 @@ public class Users implements Serializable, UserDetails {
             .add("country", country)
             .add("city", city)
             .add("profession", profession)
-            .add("subscriptionDate", subscriptionDate);         
+            .add("subscriptionDate", subscriptionDate)
+            .add("profileImage",profileImage);
         
         JsonArrayBuilder localFollowers = Json.createArrayBuilder();
         for(Follower follower:followers){
@@ -275,7 +287,8 @@ public class Users implements Serializable, UserDetails {
             .add("country", country)
             .add("city", city)
             .add("profession", profession)
-            .add("subscriptionDate", subscriptionDate);
+            .add("subscriptionDate", subscriptionDate)
+            .add("profileImage",profileImage);
     }
     
     public void addInterest(Interest interest){
