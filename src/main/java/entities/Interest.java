@@ -39,6 +39,14 @@ public class Interest implements Serializable {
     @Column(nullable=false)
     private long timestamp;
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public Users getFkUser() {
         return fkUser;
     }

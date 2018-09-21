@@ -152,6 +152,7 @@ public class CardController {
     //https://www.tutorialspoint.com/ejb/ejb_query_language.htm
     @RequestMapping(/*method = GET,*/ value = "/get-category-cards")
     public String getCategoryCards(Long idCategory) {
+        System.out.println("getCategoryCards");
         JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
         List<Object> result;
         ArrayList params = new ArrayList();
@@ -178,6 +179,7 @@ public class CardController {
     //***7) GET ALL followed CARD in interest***
     @RequestMapping(/*method = GET,*/ value = "/get-followed-cards")
     public String getFollowedCards(Long idUser) {
+        System.out.println("getFollowedCards");
         JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
         List<Object> result;
         ArrayList params = new ArrayList();
@@ -187,7 +189,7 @@ public class CardController {
         String ejbQL = "SELECT DISTINCT c, COUNT(r) as interestNumber, AVG(r.value) as avgRating "
                 + "FROM Card c, Rating r, Users u "
                 + "WHERE u.idUser=?1 AND c.fkUser IN (SELECT f.followed FROM Follower f WHERE f.follower=u) AND "
-                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND (r.fkCard=c) "
+                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory IN (SELECT cc.fkCategory FROM CardCategory cc where cc.fkCard=c))) AND (r.fkCard=c) "
                 + "GROUP BY c "
                 + "ORDER BY 2,3";
         result=queryExecuter(ejbQL,params); 
@@ -196,7 +198,7 @@ public class CardController {
         ejbQL = "SELECT DISTINCT c, 0, 0 "
                 + "FROM Card c, Users u "
                 + "WHERE u.idUser=?1 AND c.fkUser IN (SELECT f.followed FROM Follower f WHERE f.follower=u) AND "
-                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND NOT EXISTS (SELECT r1 FROM Rating r1 where r1.fkCard=c) ";
+                + "(EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory IN (SELECT cc.fkCategory FROM CardCategory cc where cc.fkCard=c))) AND NOT EXISTS (SELECT r1 FROM Rating r1 where r1.fkCard=c) ";
 
         result=queryExecuter(ejbQL,params);
         complexCardIterator(result,localComplexCards);
@@ -207,6 +209,7 @@ public class CardController {
     
     @RequestMapping(/*method = GET,*/ value = "/get-user-cards")
     public String getUserCards(Long idUser) {
+        System.out.println("getUserCards");
         JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
         List<Object> result;
         ArrayList params = new ArrayList();
@@ -236,6 +239,8 @@ public class CardController {
     //***7) GET ALL followed CARD in interest***
     @RequestMapping(/*method = GET,*/ value = "/get-popular-cards")
     public String getPopularCards(Long idUser) {
+        System.out.println("getPopularCards");        
+        System.out.println(idUser);
         JsonArrayBuilder localComplexCards = Json.createArrayBuilder();
         List<Object> result;
         ArrayList params = new ArrayList();
@@ -244,10 +249,11 @@ public class CardController {
         String ejbQL = "SELECT DISTINCT c, COUNT(r) as ratingNumber, AVG(r.value) as avgRating "
                 + "FROM Card c, Rating r, Users u "
                 + "WHERE u.idUser=?1 "
-                + "AND (EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory MEMBER OF c.categories)) AND r.fkCard=c "
+                + "AND (EXISTS (SELECT i.fkCategory FROM Interest i WHERE i.fkUser=u AND i.fkCategory IN (SELECT cc.fkCategory FROM CardCategory cc where cc.fkCard=c))) AND r.fkCard=c "
                 + "GROUP BY c "
-                + "ORDER BY 2,3,4";
+                + "ORDER BY 2,3";
         result=queryExecuter(ejbQL,params); 
+        System.out.println(result.toString());
         complexCardIterator(result,localComplexCards);
         
         ejbQL = "SELECT DISTINCT c, 0, 0 "

@@ -99,6 +99,7 @@ public class UserController{
         Interest interest = new Interest();
         interest.setFkCategory(category);
         interest.setFkUser(user);
+        interest.setTimestamp((int) (System.currentTimeMillis() / 1000L));
         user.addInterest(interest);
         interestRepository.save(interest);
     }

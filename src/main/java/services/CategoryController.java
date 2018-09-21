@@ -45,15 +45,13 @@ public class CategoryController {
     
     //1) Tutte le categorie
     @RequestMapping(/*method = GET,*/ value = "/findall")
-    public String findAll(){
-        String result = "";
-
-        System.out.println(categoryRepository.findAll());
+    public String findAll(){      
+        JsonArrayBuilder localCategories = Json.createArrayBuilder();
         
         for(Category cust : categoryRepository.findAll()){
-            result += cust + "<br>";
+            localCategories.add(cust.toJsonObjectBuilder());
         }
-        return result;
+        return localCategories.build().toString();
     }
     
     //2) ricerca di una categoria per id

@@ -245,8 +245,9 @@ public class Users implements Serializable, UserDetails {
             .add("country", country)
             .add("city", city)
             .add("profession", profession)
-            .add("subscriptionDate", subscriptionDate)
-            .add("profileImage",profileImage);
+            .add("subscriptionDate", subscriptionDate);
+        if(profileImage!=null)
+            obj.add("profileImage",profileImage);
         
         JsonArrayBuilder localFollowers = Json.createArrayBuilder();
         for(Follower follower:followers){
@@ -277,7 +278,7 @@ public class Users implements Serializable, UserDetails {
     }    
     
     public JsonObjectBuilder toJsonObjectBuilder() {
-        return Json.createObjectBuilder()
+        JsonObjectBuilder obj = Json.createObjectBuilder()
             .add("idUser", idUser)
             .add("username", username)
             .add("email", email)
@@ -287,8 +288,10 @@ public class Users implements Serializable, UserDetails {
             .add("country", country)
             .add("city", city)
             .add("profession", profession)
-            .add("subscriptionDate", subscriptionDate)
-            .add("profileImage",profileImage);
+            .add("subscriptionDate", subscriptionDate);
+        if(profileImage!=null)
+            obj.add("profileImage",profileImage);
+        return obj;
     }
     
     public void addInterest(Interest interest){
